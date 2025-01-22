@@ -9,17 +9,21 @@ function ToDoList() {
   }
 }
 
-function CompleteTask {
+function addToDo {
+
+}
+
+function CompleteToDo {
 
 }
 
 
-function DeleteTask {
+function DeleteToDo {
 
 }
 
 
-function EditTask {
+function EditToDo {
 
 }
 
@@ -32,10 +36,23 @@ return(
             <input 
              type="text"
              placeholder="Enter a task"
-             value= {newTask}
+             value= {newToDo}
              onChange = {handleInputChange}/>
 
-             <button className="">Add</button>
+             <button className="add-btn" onClick={addToDo}>Add</button>
+
+             <ol>
+                {toDos.map((toDo, index) =>
+                <li>
+                    <input type="checkbox" onChange={CompleteToDo} />
+                    <p className="task">{toDo}</p>
+                    <button className="edit-btn" onClick={() => EditToDo (index)}>Edit</button>
+                    <button className="delete-btn" onClick={() => DeleteToDo (index)}>Delete</button>
+
+
+                </li>
+                )}
+             </ol>
         </div>
 
 
