@@ -8,7 +8,11 @@ export default function ToDoList() {
         title: "",
         completed: false
     });
-    const [editTodo, setEditTodo] = useState(false);
+    const [editTodo, setEditTodo] = useState({
+        id: null,
+        title: "",
+        completed: false
+    });
 
     function handleInputChange(event) {
         const todoTobeAdded = {
@@ -32,7 +36,7 @@ export default function ToDoList() {
     }
 
     function CompleteToDo(id) {
-        const updatedTodos = todos.map(todo => (todo.id == id) ? {...todo, completed: !todo.completed} :  todo);
+        const updatedTodos = todos.map(todo => (todo.id == id) ? { ...todo, completed: !todo.completed } : todo);
         setTodos(updatedTodos)
     }
 
@@ -43,8 +47,23 @@ export default function ToDoList() {
     }
 
 
-    function EditToDo() {
+    function EditToDo(todo) {
+        setEditTodo(todo);
+    }
 
+    function handleEditInput(event) {
+        setEditTodo({ ...editTodo, title: event.target.value });
+
+    }
+
+    function handleSave() {
+        const updatedTodos = todos.map(todo => (todo.id == editTodo.id) ? editTodo : todo);
+        setTodos(updatedTodos)
+        setEditTodo({
+            id: null,
+            title: "",
+            completed: false
+        });
     }
 
     return (
@@ -63,8 +82,21 @@ export default function ToDoList() {
                         <li key={index}>
                             <input type="checkbox" onChange={() => CompleteToDo(todo.id)} />
                             <p className="task">{todo.title}</p>
-                            <button className="edit-btn" onClick={() => EditToDo(todo.id)}>Edit</button>
-                            <button className="delete-btn" onClick={() => deleteTodo(todo.id)} disabled={!todo.completed}>Delete</button>
+                            {
+                                editTodo.id == todo.id ? <>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter a task"
+                                        value={editTodo.title}
+                                        onChange={handleEditInput} />
+                                    <button className="edit-btn" onClick={() => handleSave()}>Save</button>
+                                </>
+                                    : <button className="edit-btn" onClick={() => EditToDo(todo)}>Edit</button>
+                            }
+                            {
+                                !editTodo.id &&
+                                <button className="delete-btn" onClick={() => deleteTodo(todo.id)} disabled={!todo.completed}>Delete</button>
+                            }
                         </li>
                     )}
                 </ol>
