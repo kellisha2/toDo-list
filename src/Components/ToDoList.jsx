@@ -8,6 +8,7 @@ export default function ToDoList() {
         title: "",
         completed: false
     });
+    const [editTodo, setEditTodo] = useState(false);
 
     function handleInputChange(event) {
         const todoTobeAdded = {
@@ -22,24 +23,29 @@ export default function ToDoList() {
     function addTodo() {
         if (newTodo.title.trim() !== "") {
             setTodos(todos => [...todos, newTodo]);
-            setNewTodo("");
+            setNewTodo({
+                id: null,
+                title: "",
+                completed: false
+            });
         }
     }
 
-    function CompleteToDo() {
-
+    function CompleteToDo(id) {
+        const updatedTodos = todos.map(todo => (todo.id == id) ? {...todo, completed: !todo.completed} :  todo);
+        setTodos(updatedTodos)
     }
 
 
-    function DeleteToDo(index) {
-        const currentToDos = task.filter((_, i) => i !== index)
-        setTodos(currentToDos)
+    function deleteTodo(id) {
+        const currentToDos = todos.filter(todo => todo.id != id);
+        setTodos(currentToDos);
     }
 
 
-    // function EditToDo {
+    function EditToDo() {
 
-    // }
+    }
 
     return (
         <div className="toDoList">
@@ -55,17 +61,14 @@ export default function ToDoList() {
                 <ol>
                     {todos.map((todo, index) =>
                         <li key={index}>
-                            <input type="checkbox" onChange={CompleteToDo} />
+                            <input type="checkbox" onChange={() => CompleteToDo(todo.id)} />
                             <p className="task">{todo.title}</p>
                             <button className="edit-btn" onClick={() => EditToDo(todo.id)}>Edit</button>
-                            <button className="delete-btn" onClick={() => DeleteToDo(todo.id)}>Delete</button>
+                            <button className="delete-btn" onClick={() => deleteTodo(todo.id)} disabled={!todo.completed}>Delete</button>
                         </li>
                     )}
                 </ol>
-
             </div>
-
-
         </div>
     )
 }
